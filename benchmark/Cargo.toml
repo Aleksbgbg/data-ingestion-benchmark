@@ -4,3 +4,8 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
+clap = { version = "4.5.4", default-features = false, features = ["color", "derive", "help", "std", "usage"] }
+common = { version = "0.0.0", path = "../common", default-features = false }
+rand = { version = "0.8.5", default-features = false, features = ["getrandom", "std", "std_rng"] }
+tracing = { version = "0.1.40", default-features = false, features = ["attributes"] }
+tracing-subscriber = { version = "0.3.18", default-features = false, features = ["ansi", "fmt"] }
