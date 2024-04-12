@@ -1,35 +1,10 @@
 use clap::Parser;
+use common::TCP_PACKET_SIZE;
 use std::cmp;
 use std::io::{Error, ErrorKind, Read, Result, Write};
 use std::net::{TcpListener, TcpStream};
 use std::time::Instant;
 use tracing::{info, Level};
-
-const TCP_PACKET_SIZE: usize = 2_usize.pow(16);
-
-fn human_readable_time(nanos: f64) -> String {
-  const SUBDIVISION: f64 = 1000.0;
-  const UNITS: [&str; 4] = ["ns", "μs", "ms", "s"];
-
-  to_human_readable(nanos, SUBDIVISION, &UNITS)
-}
-
-fn human_readable_data(bytes: f64) -> String {
-  const SUBDIVISION: f64 = 1024.0;
-  const UNITS: [&str; 5] = ["B", "KiB", "MiB", "GiB", "TiB"];
-
-  to_human_readable(bytes, SUBDIVISION, &UNITS)
-}
-
-fn to_human_readable(mut value: f64, subdivision: f64, units: &[&str]) -> String {
-  let mut divisions = 0;
-  while (value >= subdivision) && (divisions <= units.len()) {
-    value /= subdivision;
-    divisions += 1;
-  }
-
-  format!("{:.2}{}", value, units[divisions])
-}
 
 #[derive(Parser)]
 struct Args {
@@ -87,7 +62,7 @@ fn ingest(mut stream: TcpStream) -> Result<()> {
   })?;
   info!(
     "expecting body length of {}",
-    human_readable_data(length_bytes as f64)
+    common::human_readable_data(length_bytes as f64)
   );
 
   scanner.consume_until(BODY_SEPARATOR)?;
@@ -99,7 +74,7 @@ fn ingest(mut stream: TcpStream) -> Result<()> {
 
   info!(
     "end (server-side took {})",
-    human_readable_time(start_time.elapsed().as_nanos() as f64)
+    common::human_readable_time(start_time.elapsed().as_nanos() as f64)
   );
 
   Ok(())

@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["benchmark", "frameworkless"]
+members = ["benchmark", "common", "frameworkless"]
 
 [profile.release]
 opt-level = 2
