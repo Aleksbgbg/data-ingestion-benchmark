@@ -7,12 +7,20 @@ default:
   tags:
     - linux
 
-build:
+rust-build:
   stage: build
   image: rust:latest
   needs: []
   script:
     - cargo build
+
+go-build:
+  stage: build
+  image: golang:latest
+  needs: []
+  script:
+    - cd gin
+    - go build
 
 format:
   stage: lint

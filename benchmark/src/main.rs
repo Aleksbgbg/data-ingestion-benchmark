@@ -88,18 +88,24 @@ fn fill(buf: &mut [u8]) {
 }
 
 fn send_and_measure(args: &Args, size: usize, buf: &[u8]) -> Result<Duration> {
-  let stream = TcpStream::connect(format!("{}:{}", args.address, args.port))?;
+  let host = format!("{}:{}", args.address, args.port);
+  let stream = TcpStream::connect(&host)?;
 
   let start_time = Instant::now();
-  send(stream, &args.url, size, buf)?;
+  send(&host, stream, &args.url, size, buf)?;
   let end_time = start_time.elapsed();
 
   Ok(end_time)
 }
 
-fn send(mut stream: TcpStream, url: &str, size: usize, buf: &[u8]) -> Result<()> {
-  stream
-    .write_all(format!("POST {} HTTP/1.1\r\nContent-Length: {}\r\n\r\n", url, size).as_bytes())?;
+fn send(host: &str, mut stream: TcpStream, url: &str, size: usize, buf: &[u8]) -> Result<()> {
+  stream.write_all(
+    format!(
+      "POST {} HTTP/1.1\r\nHost: {}\r\nContent-Length: {}\r\n\r\n",
+      url, host, size
+    )
+    .as_bytes(),
+  )?;
 
   let mut sent = 0;
   while sent < size {
