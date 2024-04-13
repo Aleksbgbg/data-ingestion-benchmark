@@ -601,6 +601,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "frameworkless-async"
+version = "0.0.0"
+dependencies = [
+ "async-tempfile",
+ "clap",
+ "common",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "futures"
 version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
