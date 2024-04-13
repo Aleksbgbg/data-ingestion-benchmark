@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["axum", "benchmark", "common", "frameworkless"]
+members = ["actix", "axum", "benchmark", "common", "frameworkless"]
 
 [profile.release]
 opt-level = 2
