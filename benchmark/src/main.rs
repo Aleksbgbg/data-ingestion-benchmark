@@ -39,7 +39,7 @@ fn main() -> Result<()> {
 #[tracing::instrument(skip_all)]
 fn benchmark(args: &Args) -> Result<()> {
   const DATA_SIZE: usize = 100 * 1024 * 1024;
-  const WARMUP_ITERATIONS: usize = 100;
+  const WARMUP_ITERATIONS: usize = 40;
   const BENCHMARK_ITERATIONS: usize = 100;
 
   let mut buf = [0; TCP_PACKET_SIZE];
