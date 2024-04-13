@@ -70,7 +70,7 @@ fn ingest(mut stream: TcpStream) -> Result<()> {
   let mut file = tempfile::tempfile()?;
   scanner.read_n_bytes_into(length_bytes, &mut file)?;
 
-  stream.write_all("HTTP/1.1 204 No Content\r\nContent-Length: 0\r\n\r\n".as_bytes())?;
+  stream.write_all("HTTP/1.1 204 No Content\r\n\r\n".as_bytes())?;
 
   info!(
     "end (server-side took {})",
