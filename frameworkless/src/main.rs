@@ -4,7 +4,7 @@ use std::cmp;
 use std::io::{Error, ErrorKind, Read, Result, Write};
 use std::net::{TcpListener, TcpStream};
 use std::time::Instant;
-use tracing::{info, Level};
+use tracing::{debug, info, Level};
 
 #[derive(Parser)]
 struct Args {
@@ -21,7 +21,11 @@ fn main() -> Result<()> {
   tracing_subscriber::fmt()
     .with_target(false)
     .compact()
-    .with_max_level(Level::DEBUG)
+    .with_max_level(if cfg!(debug_assertions) {
+      Level::DEBUG
+    } else {
+      Level::INFO
+    })
     .init();
 
   let args = Args::parse();
@@ -43,7 +47,7 @@ fn ingest(mut stream: TcpStream) -> Result<()> {
   const NEWLINE_SEPARATOR: &str = "\r\n";
   const BODY_SEPARATOR: &str = "\r\n\r\n";
 
-  info!("begin");
+  debug!("begin");
 
   let start_time = Instant::now();
 
@@ -60,7 +64,7 @@ fn ingest(mut stream: TcpStream) -> Result<()> {
       ),
     )
   })?;
-  info!(
+  debug!(
     "expecting body length of {}",
     common::human_readable_data(length_bytes as f64)
   );
@@ -72,7 +76,7 @@ fn ingest(mut stream: TcpStream) -> Result<()> {
 
   stream.write_all("HTTP/1.1 204 No Content\r\n\r\n".as_bytes())?;
 
-  info!(
+  debug!(
     "end (server-side took {})",
     common::human_readable_time(start_time.elapsed().as_nanos() as f64)
   );
